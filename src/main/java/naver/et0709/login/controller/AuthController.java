@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     @PostMapping("/signUp")
     public ResponseDto<SignUpDto> signUp(@RequestBody SignUpDto requestBody) {
