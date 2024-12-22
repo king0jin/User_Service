@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import CheckResponse from "./CheckResponse";
 
 function App() {
   const [data, setData] = useState('')
@@ -12,7 +13,11 @@ function App() {
 
   return (
       <div>
-        받아온 값 : {data}
+          <h2>첫 번째 데이터 요청:</h2>
+          <p>받아온 값: {data}</p>
+
+          {/* 새로운 컴포넌트 렌더링 */}
+          <CheckResponse/>
       </div>
   );
 }
