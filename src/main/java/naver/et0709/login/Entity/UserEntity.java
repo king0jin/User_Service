@@ -2,6 +2,7 @@ package naver.et0709.login.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import naver.et0709.login.Dto.SignUpDto;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String name; // 사용자 이름
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role = Role.MEMBER; // 역할 (기본값: MEMBER)
@@ -35,6 +37,7 @@ public class UserEntity {
     @Column(name = "last_update")
     private LocalDateTime lastUpdate; // 마지막 업데이트
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus = UserStatus.ACTIVE; // 가입 여부 상태 (기본값: ACTIVE)
@@ -48,6 +51,28 @@ public class UserEntity {
     @PreUpdate
     protected void onUpdate() {
         this.lastUpdate = LocalDateTime.now();
+    }
+    // SignUpDto로 UserEntity 생성
+    public UserEntity(SignUpDto dto) {
+        this.userId = dto.getUserId();
+        this.userPw = dto.getUserPw();
+        this.name = dto.getName();
+        this.role = mapRole(dto.getRole());
+        this.createdDate = LocalDateTime.now();
+        this.lastUpdate = LocalDateTime.now();
+        this.userStatus = mapUserStatus(dto.getUserStatus());
+    }
+    private UserStatus mapUserStatus(SignUpDto.UserStatus dtoStatus) {
+        if (dtoStatus == null) {
+            return UserStatus.ACTIVE; // 기본값
+        }
+        return UserStatus.valueOf(dtoStatus.name()); // 이름 매핑
+    }
+    private Role mapRole(SignUpDto.Role dtoRole) {
+        if (dtoRole == null) {
+            return Role.MEMBER; // 기본값
+        }
+        return Role.valueOf(dtoRole.name()); // 이름 매핑
     }
 
     public enum Role {
